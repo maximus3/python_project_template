@@ -4,7 +4,7 @@
     ...
 
 ### Build docker container:
-    make build
+    make docker-build
 
 ### Run docker container:
     make docker-run
