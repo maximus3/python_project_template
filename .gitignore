@@ -106,5 +106,3 @@ venv.bak/
 # IDE
 .idea/
 .vscode/
-
-poetry.lock
