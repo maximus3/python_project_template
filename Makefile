@@ -11,7 +11,7 @@ endif
 
 TEST = $(VENV_BIN)/poetry run pytest --verbosity=2 --showlocals --log-level=DEBUG --strict-markers $(arg) -k "$(k)"
 
-POETRY_VERSION=1.1.5
+POETRY_VERSION=1.1.13
 POETRY_RUN = poetry run
 
 

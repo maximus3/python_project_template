@@ -31,12 +31,13 @@ COPY pyproject.toml pyproject.toml
 
 RUN poetry install $(if test "$ENVIRONMENT" = production; then echo "--no-dev"; fi)
 
+COPY setup.cfg setup.cfg
+COPY Makefile Makefile
+
 COPY app app
 COPY config config
 COPY database database
 COPY tests tests
-COPY Makefile Makefile
-COPY setup.cfg setup.cfg
 
 ENTRYPOINT []
 CMD ["make", "run"]
