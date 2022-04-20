@@ -9,10 +9,10 @@ else
     VENV_BIN = $(VENV)/bin
 endif
 
-TEST = $(VENV_BIN)/poetry run pytest --verbosity=2 --showlocals --log-level=DEBUG --strict-markers $(arg) -k "$(k)"
-
 POETRY_VERSION=1.1.13
 POETRY_RUN = poetry run
+
+TEST = $(POETRY_RUN) pytest --verbosity=2 --showlocals --log-level=DEBUG
 
 
 .PHONY: help
@@ -36,7 +36,7 @@ run: ## Run App
 
 .PHONY: test
 test: ## Runs pytest with coverage
-	$(TEST) --cov=app
+	$(TEST) --cov
 
 .PHONY: test-fast
 test-fast: ## Runs pytest with exitfirst
@@ -60,7 +60,7 @@ format: ## Formats all files
 .PHONY: lint
 lint: ## Lint code
 	$(POETRY_RUN) flake8 --jobs 4 --statistics --show-source $(CODE)
-	$(POETRY_RUN) pylint --rcfile=setup.cfg $(CODE)
+	$(POETRY_RUN) pylint --jobs 4 --rcfile=setup.cfg $(CODE)
 	$(POETRY_RUN) mypy $(CODE)
 	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization --check $(CODE)
 	$(POETRY_RUN) pytest --dead-fixtures --dup-fixtures

@@ -12,4 +12,4 @@ class ConfigData(BaseSettings):
         env_file: Path = BASE_DIR / '.env'
 
 
-cfg = ConfigDataClass()
+cfg = ConfigData()
