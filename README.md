@@ -3,7 +3,13 @@
 ### Description:
     ...
 
-### Create venv:
+### Build docker container:
+    make build
+
+### Run docker container:
+    make docker-run
+
+### Create venv (if no docker):
     make venv
 
 ### Run app:

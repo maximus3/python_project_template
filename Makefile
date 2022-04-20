@@ -88,10 +88,6 @@ docker-rm-none: ## Remove all untagged docker images
 docker-run: ## Run docker image
 	docker container run -d --rm --name $(DOCKER_NAME) $(DOCKER_IMAGE)
 
-.PHONY: docker-run-port
-docker-run-port: ## Run docker image with port forwarding
-	docker container run -d --rm --name $(DOCKER_NAME) -p 1234:8080 $(DOCKER_IMAGE)
-
 .PHONY: docker-run-it
 docker-run-it: ## Run docker image interactive
 	docker run -it $(DOCKER_IMAGE)
