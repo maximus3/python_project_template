@@ -14,7 +14,6 @@ ENV PYTHONUNBUFFERED=on
 ENV PYTHONPATH=/opt/app
 
 ENV POETRY_VERSION=1.1.5
-#ARG ENVIRONMENT=production
 ARG ENVIRONMENT=development
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -36,7 +35,6 @@ COPY app app
 COPY config config
 COPY database database
 COPY tests tests
-#COPY .env .env
 COPY Makefile Makefile
 COPY setup.cfg setup.cfg
 

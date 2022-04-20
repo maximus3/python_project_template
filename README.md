@@ -3,11 +3,11 @@
 ### Description:
     ...
 
-### Build docker container:
-    make docker-build
+### Up docker container:
+    make docker-up
 
-### Run docker container:
-    make docker-run
+### Down docker container:
+    make docker-down
 
 ### Create venv (if no docker):
     make venv

@@ -14,9 +14,6 @@ TEST = $(VENV_BIN)/poetry run pytest --verbosity=2 --showlocals --log-level=DEBU
 POETRY_VERSION=1.1.5
 POETRY_RUN = poetry run
 
-DOCKER_NAME = test-app
-DOCKER_IMAGE = $(DOCKER_NAME)
-
 
 .PHONY: help
 help: ## Show this help
@@ -72,25 +69,10 @@ lint: ## Lint code
 .PHONY: check
 check: format lint test ## Format and lint code then run tests
 
-.PHONY: docker-build
-docker-build: ## Build docker image
-	docker build -t $(DOCKER_IMAGE) .
+.PHONY: docker-up
+docker-up: ## Docker up
+	docker-compose up -d
 
-.PHONY: docker-rm
-docker-rm: ## Remove docker image
-	docker image rm $(DOCKER_IMAGE)
-
-.PHONY: docker-rm-none
-docker-rm-none: ## Remove all untagged docker images
-	docker images | grep "<none>" | awk '{print $3}' | xargs docker rmi
-
-.PHONY: docker-run
-docker-run: ## Run docker image
-	docker container run -d --rm --name $(DOCKER_NAME) $(DOCKER_IMAGE)
-
-.PHONY: docker-run-it
-docker-run-it: ## Run docker image interactive
-	docker run -it $(DOCKER_IMAGE)
-
-.PHONY: docker-all
-docker-all: docker-rm docker-build docker-run ## Docker rm, build and run
+.PHONY: docker-down
+docker-down: ## Docker down
+	docker-compose down
