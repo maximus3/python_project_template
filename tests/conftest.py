@@ -2,6 +2,7 @@ import pytest
 
 from .database import tmp_database_name
 from .database.config import Session, prepare_db, remove_db
+from .static import user_proxy_data
 
 
 @pytest.fixture()
@@ -14,3 +15,9 @@ def prepare_db_env(mocker):
     prepare_db()
     yield
     remove_db()
+
+
+@pytest.fixture()
+def prepare_db_user_env(prepare_db_env):
+    user_proxy_data()[0].create(**user_proxy_data()[1])
+    yield

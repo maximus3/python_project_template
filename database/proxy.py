@@ -69,6 +69,11 @@ class BaseProxy:
             session.add(model)
             return self
 
+    def __eq__(self: BaseProxyType, other: object) -> bool:
+        if not isinstance(other, BaseProxy):
+            return NotImplemented
+        return self.id == other.id
+
 
 class UserProxy(BaseProxy):
     BASE_MODEL = User
