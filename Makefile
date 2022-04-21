@@ -25,6 +25,8 @@ venv: ## Create virtual environment, no need in docker
 	$(PYTHON_EXECUTABLE) -m venv $(VENV)
 	$(VENV_BIN)/python -m pip install --upgrade pip
 	$(VENV_BIN)/python -m pip install poetry==$(POETRY_VERSION)
+	$(VENV_BIN)/poetry config virtualenvs.create true
+	$(VENV_BIN)/poetry config virtualenvs.in-project true
 	$(VENV_BIN)/poetry install --no-interaction --no-ansi
 
 .PHONY: install
@@ -61,7 +63,7 @@ format: ## Formats all files
 .PHONY: lint
 lint: ## Lint code
 	$(POETRY_RUN) flake8 --jobs 4 --statistics --show-source $(CODE)
-	$(POETRY_RUN) pylint --jobs 4 --rcfile=setup.cfg $(CODE)
+	$(POETRY_RUN) pylint --rcfile=setup.cfg $(CODE)
 	$(POETRY_RUN) mypy $(CODE)
 	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization --check $(CODE)
 	$(POETRY_RUN) pytest --dead-fixtures --dup-fixtures
