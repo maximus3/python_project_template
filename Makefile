@@ -1,4 +1,5 @@
-CODE = app config tests
+CODE = app config database
+CODE_FORMAT = $(CODE) tests
 
 VENV = .venv
 ifeq ($(OS),Windows_NT)
@@ -52,10 +53,10 @@ test-cov: ## Runs pytest with coverage report
 
 .PHONY: format
 format: ## Formats all files
-	$(POETRY_RUN) autoflake --recursive --in-place --remove-all-unused-imports $(CODE)
-	$(POETRY_RUN) isort $(CODE)
-	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization $(CODE)
-	$(POETRY_RUN) unify --in-place --recursive $(CODE)
+	$(POETRY_RUN) autoflake --recursive --in-place --remove-all-unused-imports $(CODE_FORMAT)
+	$(POETRY_RUN) isort $(CODE_FORMAT)
+	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization $(CODE_FORMAT)
+	$(POETRY_RUN) unify --in-place --recursive $(CODE_FORMAT)
 
 .PHONY: lint
 lint: ## Lint code
@@ -71,7 +72,18 @@ check: format lint test ## Format and lint code then run tests
 
 .PHONY: docker-up
 docker-up: ## Docker up
+	docker-compose up
+
+.PHONY: docker-up-d
+docker-up-d: ## Docker up detach
 	docker-compose up -d
+
+.PHONY: docker-build
+docker-build: ## Docker build
+	docker-compose build
+
+.PHONY: docker
+docker: docker-build docker-up ## Docker up and run
 
 .PHONY: docker-down
 docker-down: ## Docker down

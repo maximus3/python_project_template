@@ -1,12 +1,13 @@
 from pathlib import Path
 
-from pydantic import BaseModel, BaseSettings, Field
+from pydantic import BaseSettings, Field
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 class ConfigData(BaseSettings):
-    SOME_ENV: str = Field(None, env='SOME_ENV')
+    DATABASE_ENGINE: str = Field('sqlite:///', env='DATABASE_ENGINE')
+    DATABASE_NAME: str = Field('data.db', env='DATABASE_NAME')
 
     class Config:
         env_file: Path = BASE_DIR / '.env'
