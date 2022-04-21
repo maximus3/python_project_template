@@ -82,9 +82,13 @@ docker-up-d: ## Docker up detach
 docker-build: ## Docker build
 	docker-compose build
 
-.PHONY: docker
-docker: docker-build docker-up ## Docker up and run
-
 .PHONY: docker-down
 docker-down: ## Docker down
 	docker-compose down
+
+.PHONY: docker-clean
+docker-clean: ## Docker prune -f
+	docker image prune -f
+
+.PHONY: docker
+docker: docker-clean docker-build docker-up docker-clean ## Docker prune, up, run and prune

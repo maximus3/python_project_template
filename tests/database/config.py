@@ -1,8 +1,4 @@
-from contextlib import contextmanager
-from typing import Any
-
 import sqlalchemy as sa
-from sqlalchemy.orm import Session as SessionType
 from sqlalchemy.orm import sessionmaker
 
 from config import BASE_DIR

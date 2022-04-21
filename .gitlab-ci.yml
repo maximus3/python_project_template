@@ -2,7 +2,7 @@ image: python:3.9
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  CODE: "tests app"
+  CODE: "app config database"
 
 cache:
   paths:

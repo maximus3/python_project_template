@@ -1,8 +1,5 @@
-import datetime as dt
-
 import pytest
 
-from config.departments import departments
 from database import proxy
 
 

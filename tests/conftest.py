@@ -1,9 +1,4 @@
-import datetime as dt
-
 import pytest
-
-from config.departments import departments
-from database import proxy
 
 from .database import tmp_database_name
 from .database.config import Session, prepare_db, remove_db
