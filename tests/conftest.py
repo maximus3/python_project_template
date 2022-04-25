@@ -1,6 +1,6 @@
 import pytest
 
-from .database import tmp_database_name
+from .database import tmp_database_name, tmp_database_engine
 from .database.config import Session, prepare_db, remove_db
 from .static import user_proxy_data
 
@@ -9,9 +9,7 @@ from .static import user_proxy_data
 def prepare_db_env(mocker):
     mocker.patch('database.Session', Session)
     mocker.patch('config.cfg.DATABASE_NAME', tmp_database_name)
-    mocker.patch(
-        'config.cfg.DATABASE_ENGINE', 'sqlite:///' + tmp_database_name
-    )
+    mocker.patch('config.cfg.DATABASE_ENGINE', tmp_database_engine)
     prepare_db()
     yield
     remove_db()

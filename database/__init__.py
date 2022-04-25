@@ -3,13 +3,13 @@ from typing import Any
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Session as SessionType
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-from config import cfg
+from config import BASE_DIR, cfg
 from database.models import Base
 
 engine = sa.create_engine(cfg.DATABASE_ENGINE)
-Session = sessionmaker(bind=engine)
+Session = scoped_session(sessionmaker(bind=engine))
 
 
 @contextmanager
@@ -26,4 +26,5 @@ def create_session(**kwargs: Any) -> SessionType:
 
 
 def create_all() -> None:
-    Base.metadata.create_all(engine)
+    if not (BASE_DIR / cfg.DATABASE_NAME).exists():
+        Base.metadata.create_all(engine)
