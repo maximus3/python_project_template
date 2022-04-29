@@ -40,4 +40,5 @@ COPY database database
 COPY tests tests
 
 ENTRYPOINT []
-CMD ["make", "check"]
+RUN make check
+CMD ["make", "run"]
