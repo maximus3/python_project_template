@@ -1,7 +1,12 @@
 # Template
 
-### Description:
+## Description:
     ...
+
+## Commands
+
+### Docker clean, build, up, clean
+    make docker
 
 ### Up docker container:
     make docker-up
@@ -13,7 +18,7 @@
     make venv
 
 ### Run app:
-    make run
+    make up
 
 ### Run tests:
     make test
@@ -26,3 +31,4 @@
 
 ### Run format and lint code then run tests:
     make check
+
