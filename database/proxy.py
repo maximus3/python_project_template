@@ -2,10 +2,10 @@ from typing import Any, Optional, Type, TypeVar
 
 from sqlalchemy.orm import Session as SessionType
 
-from . import create_session
-from .models import BaseModel, User
-from .schemas import BaseModel as SchemaBaseModel
-from .schemas import User as SchemaUser
+from database import create_session
+from database.models import BaseModel, User
+from database.schemas import BaseModel as SchemaBaseModel
+from database.schemas import User as SchemaUser
 
 BaseProxyType = TypeVar('BaseProxyType', bound='BaseProxy')
 
@@ -87,7 +87,7 @@ class BaseProxy:
         for model in session.query(cls.BASE_MODEL).filter_by(**kwargs).all():
             data.append(cls(model))
         return data
-        
+
     @classmethod
     def get_or_create(
         cls: Type[BaseProxyType], session: SessionType = None, **kwargs: Any
@@ -137,11 +137,8 @@ class BaseProxy:
                 return None
         session.add(model)
         return self
-        
-    def get_me(self: BaseProxyType, session: SessionType = None) -> BaseModel:
-        if session is None:
-            with create_session() as new_session:
-                return self.get_me(new_session)
+
+    def get_me(self: BaseProxyType, session: SessionType) -> BaseModel:
         return session.query(self.BASE_MODEL).get(self.id)
 
 

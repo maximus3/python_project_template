@@ -5,7 +5,7 @@ import sqlalchemy as sa
 from sqlalchemy.orm import Session as SessionType
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from config import BASE_DIR, cfg
+from config.config import BASE_DIR, cfg
 from database.models import Base
 
 engine = sa.create_engine(cfg.DATABASE_ENGINE)

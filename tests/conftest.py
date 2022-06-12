@@ -1,17 +1,16 @@
 import pytest
 
 from database import create_session as real_create_session
-
-from .database import tmp_database_engine, tmp_database_name
-from .database.config import Session, prepare_db, remove_db
-from .static import user_proxy_data
+from tests.database import tmp_database_engine, tmp_database_name
+from tests.database.config import Session, prepare_db, remove_db
+from tests.static import user_proxy_data
 
 
 @pytest.fixture()
 def prepare_db_env(mocker):
     mocker.patch('database.Session', Session)
-    mocker.patch('config.cfg.DATABASE_NAME', tmp_database_name)
-    mocker.patch('config.cfg.DATABASE_ENGINE', tmp_database_engine)
+    mocker.patch('config.config.cfg.DATABASE_NAME', tmp_database_name)
+    mocker.patch('config.config.cfg.DATABASE_ENGINE', tmp_database_engine)
     prepare_db()
     yield
     remove_db()
