@@ -1,7 +1,7 @@
 # Template
 
 ## Description:
-    ...
+...
 
 ## Commands
 
