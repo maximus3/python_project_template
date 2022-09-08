@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Don't periodically check PyPI to determine whether a new version of pip is available for download.
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
@@ -26,8 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /opt/app
 
-#COPY poetry.lock poetry.lock
-COPY pyproject.toml pyproject.toml
+COPY pyproject.toml poetry.loc[k] /opt/app/
 
 RUN poetry install $(if test "$ENVIRONMENT" = production; then echo "--no-dev"; fi)
 
@@ -40,5 +39,4 @@ COPY database database
 COPY tests tests
 
 ENTRYPOINT []
-RUN make check
-CMD ["make", "run"]
+CMD ["make", "up"]

@@ -9,6 +9,6 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
+class UserSchema(UserBase):
     class Config:
         orm_mode = True

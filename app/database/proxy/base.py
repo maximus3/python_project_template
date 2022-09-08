@@ -1,18 +1,17 @@
-from typing import Any, Optional, Type, TypeVar
+import typing as tp
 
-from sqlalchemy.orm import Session as SessionType
+from sqlalchemy.orm import Session
 
-from database import create_session
-from database.models import BaseModel, User
-from database.schemas import BaseModel as SchemaBaseModel
-from database.schemas import User as SchemaUser
+from app.database.connection import SessionManager
+from app.database.models import BaseModel
+from app.database.schemas import BaseModel as SchemaBaseModel
 
-BaseProxyType = TypeVar('BaseProxyType', bound='BaseProxy')
+BaseProxyType = tp.TypeVar('BaseProxyType', bound='BaseProxy')
 
 
 class BaseProxy:
-    BASE_MODEL: Type[BaseModel] = BaseModel
-    SCHEMA_MODEL: Type[SchemaBaseModel] = SchemaBaseModel
+    BASE_MODEL: tp.Type[BaseModel] = BaseModel
+    SCHEMA_MODEL: tp.Type[SchemaBaseModel] = SchemaBaseModel
 
     def __init__(self, model: BaseModel):
         self.id = model.id
@@ -27,12 +26,12 @@ class BaseProxy:
 
     @classmethod
     def get(
-        cls: Type[BaseProxyType],
-        session: SessionType = None,
-        **kwargs: Any,
-    ) -> Optional[BaseProxyType]:
+        cls: tp.Type[BaseProxyType],
+        session: Session = None,
+        **kwargs: tp.Any,
+    ) -> tp.Optional[BaseProxyType]:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.get(new_session, **kwargs)
         model = session.query(cls.BASE_MODEL).filter_by(**kwargs).one_or_none()
         if model:
@@ -41,47 +40,47 @@ class BaseProxy:
 
     @classmethod
     def get_expect(
-        cls: Type[BaseProxyType],
-        session: SessionType = None,
-        **kwargs: Any,
+        cls: tp.Type[BaseProxyType],
+        session: Session = None,
+        **kwargs: tp.Any,
     ) -> BaseProxyType:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.get_expect(new_session, **kwargs)
         model = session.query(cls.BASE_MODEL).filter_by(**kwargs).one()
         return cls(model)
 
     @classmethod
     def get_model(
-        cls: Type[BaseProxyType],
-        session: SessionType = None,
-        **kwargs: Any,
+        cls: tp.Type[BaseProxyType],
+        session: Session = None,
+        **kwargs: tp.Any,
     ) -> BaseModel:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.get_model(new_session, **kwargs)
         return session.query(cls.BASE_MODEL).filter_by(**kwargs).one()
 
     @classmethod
     def get_schema_model(
-        cls: Type[BaseProxyType],
-        session: SessionType = None,
-        **kwargs: Any,
+        cls: tp.Type[BaseProxyType],
+        session: Session = None,
+        **kwargs: tp.Any,
     ) -> SchemaBaseModel:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.get_schema_model(new_session, **kwargs)
         model = session.query(cls.BASE_MODEL).filter_by(**kwargs).one()
         return cls.SCHEMA_MODEL.from_orm(model)
 
     @classmethod
     def get_all(
-        cls: Type[BaseProxyType],
-        session: SessionType = None,
-        **kwargs: Any,
+        cls: tp.Type[BaseProxyType],
+        session: Session = None,
+        **kwargs: tp.Any,
     ) -> list[BaseProxyType]:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.get_all(new_session, **kwargs)
         data = []
         for model in session.query(cls.BASE_MODEL).filter_by(**kwargs).all():
@@ -90,27 +89,27 @@ class BaseProxy:
 
     @classmethod
     def get_or_create(
-        cls: Type[BaseProxyType], session: SessionType = None, **kwargs: Any
-    ) -> Optional[BaseProxyType]:
+        cls: tp.Type[BaseProxyType], session: Session = None, **kwargs: tp.Any
+    ) -> tp.Optional[BaseProxyType]:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 model = cls.get(new_session, **kwargs)
                 if model:
                     return model
                 if not cls.create(new_session, **kwargs):
                     return None
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.get(new_session, **kwargs)
         return None
 
     @classmethod
     def create(
-        cls: Type[BaseProxyType],
-        session: SessionType = None,
-        **kwargs: Any,
+        cls: tp.Type[BaseProxyType],
+        session: Session = None,
+        **kwargs: tp.Any,
     ) -> bool:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return cls.create(new_session, **kwargs)
         model = cls.BASE_MODEL(**kwargs)
         session.add(model)
@@ -118,11 +117,11 @@ class BaseProxy:
 
     def update(
         self: BaseProxyType,
-        session: SessionType = None,
-        **kwargs: Any,
-    ) -> Optional[BaseProxyType]:
+        session: Session = None,
+        **kwargs: tp.Any,
+    ) -> tp.Optional[BaseProxyType]:
         if session is None:
-            with create_session() as new_session:
+            with SessionManager().create_session() as new_session:
                 return self.update(new_session, **kwargs)
         model = (
             session.query(self.BASE_MODEL).filter_by(id=self.id).one_or_none()
@@ -138,15 +137,5 @@ class BaseProxy:
         session.add(model)
         return self
 
-    def get_me(self: BaseProxyType, session: SessionType) -> BaseModel:
+    def get_me(self: BaseProxyType, session: Session) -> BaseModel:
         return session.query(self.BASE_MODEL).get(self.id)
-
-
-class UserProxy(BaseProxy):
-    BASE_MODEL = User
-    SCHEMA_MODEL = SchemaUser
-
-    def __init__(self, user: User) -> None:
-        super().__init__(user)
-        self.username = user.username
-        self.password = user.password

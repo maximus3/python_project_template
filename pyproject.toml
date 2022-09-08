@@ -5,9 +5,11 @@ description = "Template"
 authors = []
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 pydantic = {extras = ["dotenv"], version = "^1.9.0"}
-SQLAlchemy = "^1.4.34"
+SQLAlchemy = "^1.4.39"
+alembic = "^1.8.1"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
@@ -22,6 +24,8 @@ pytest = "^7.1.0"
 pytest-cov = "^3.0.0"
 pytest-deadfixtures = "^2.2.1"
 pytest-mock = "^3.7.0"
+ConfigArgParse = "^1.5.3"
+SQLAlchemy-Utils = "^0.38.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

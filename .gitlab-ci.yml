@@ -2,7 +2,7 @@ image: python:3.9
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  CODE: "app config database"
+  CODE: "app tests"
 
 cache:
   paths:
@@ -33,5 +33,7 @@ lint:
 
 test:
   stage: test
+  services:
+    - name: postgres:13.3
   script:
     - pytest --verbosity=2 --showlocals --log-level=DEBUG --cov

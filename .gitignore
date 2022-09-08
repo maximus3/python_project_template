@@ -107,4 +107,7 @@ venv.bak/
 .idea/
 .vscode/
 
+# database
 *.db
+pgadmin/*
+pgdata/*
