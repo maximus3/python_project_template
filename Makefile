@@ -82,21 +82,25 @@ migrate:  ##@Database Do all migrations in database
 revision:  ##@Database Create new revision file automatically with prefix (ex. 2022_01_01_14cs34f_message.py)
 	alembic revision --autogenerate
 
+.PHONY: db
+db: ##@Database Docker up db
+	docker-compose up -d postgres
+
 .PHONY: test
 test: ##@Testing Runs pytest with coverage
-	$(TEST) --cov
+	make db && $(TEST) --cov
 
 .PHONY: test-fast
 test-fast: ##@Testing Runs pytest with exitfirst
-	$(TEST) --exitfirst
+	make db && $(TEST) --exitfirst
 
 .PHONY: test-failed
 test-failed: ##@Testing Runs pytest from last-failed
-	$(TEST) --last-failed
+	make db && $(TEST) --last-failed
 
 .PHONY: test-cov
 test-cov: ##@Testing Runs pytest with coverage report
-	$(TEST) --cov --cov-report html
+	make db && $(TEST) --cov --cov-report html
 
 .PHONY: format
 format: ###@Code Formats all files
@@ -112,7 +116,7 @@ lint: ###@Code Lint code
 	$(POETRY_RUN) mypy $(CODE)
 	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization --check $(CODE)
 	$(POETRY_RUN) pytest --dead-fixtures --dup-fixtures
-	$(POETRY_RUN) safety check --full-report
+	$(POETRY_RUN) safety check --full-report || echo "Safety check failed"
 
 .PHONY: check
 check: format lint test ###@Code Format and lint code then run tests

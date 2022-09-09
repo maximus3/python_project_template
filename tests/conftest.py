@@ -2,7 +2,6 @@
 # pylint: disable=unused-argument
 
 import typing as tp
-from asyncio import new_event_loop, set_event_loop
 from os import environ
 from types import SimpleNamespace
 from uuid import uuid4
@@ -20,7 +19,6 @@ from app.database.models import User
 from app.database.proxy import UserProxy
 from app.database.schemas import UserSchema
 from tests.utils import DPSClass, UserData, make_alembic_config
-
 
 # @pytest.fixture(scope='session')
 # def event_loop():

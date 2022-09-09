@@ -63,6 +63,13 @@ def test_proxy_get_or_create_exists(request, migrated_postgres, created_model):
     )
 
 
+def test_proxy_get_or_create_exists_user(migrated_postgres, created_dps_user):
+    assert (
+        created_dps_user.proxy.get_or_create(**created_dps_user.data.dict())
+        is not None
+    )
+
+
 @pytest.mark.parametrize(
     'dps_model',
     [
@@ -91,12 +98,16 @@ def test_proxy_get_expect(request, migrated_postgres, created_model):
         'created_dps_user',
     ],
 )
-def test_proxy_get_model(request, migrated_postgres, create_session, created_model):
+def test_proxy_get_model(
+    request, migrated_postgres, create_session, created_model
+):
     created_model = request.getfixturevalue(created_model)
     assert created_model.proxy.get_model(**created_model.data.dict())
     with create_session() as session:
         assert created_model.proxy(
-            created_model.proxy.get_model(**created_model.data.dict(), session=session)
+            created_model.proxy.get_model(
+                **created_model.data.dict(), session=session
+            )
         ) == created_model.proxy.get_expect(**created_model.data.dict())
 
 
@@ -106,14 +117,18 @@ def test_proxy_get_model(request, migrated_postgres, create_session, created_mod
         'created_dps_user',
     ],
 )
-def test_proxy_get_schema_model(request, migrated_postgres, create_session, created_model):
+def test_proxy_get_schema_model(
+    request, migrated_postgres, create_session, created_model
+):
     created_model = request.getfixturevalue(created_model)
     assert created_model.proxy.get_schema_model(**created_model.data.dict())
     with create_session() as session:
         assert created_model.proxy.get_schema_model(
             **created_model.data.dict()
         ) == created_model.schema.from_orm(
-            created_model.proxy.get_model(**created_model.data.dict(), session=session)
+            created_model.proxy.get_model(
+                **created_model.data.dict(), session=session
+            )
         )
 
 
