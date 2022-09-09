@@ -8,6 +8,7 @@ from alembic.config import Config
 from configargparse import Namespace
 from pydantic import BaseModel
 
+
 PROJECT_PATH = Path(__file__).parent.parent.resolve()
 
 

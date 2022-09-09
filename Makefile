@@ -106,15 +106,15 @@ test-cov: ##@Testing Runs pytest with coverage report
 format: ###@Code Formats all files
 	$(POETRY_RUN) autoflake --recursive --in-place --remove-all-unused-imports $(CODE)
 	$(POETRY_RUN) isort $(CODE)
-	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization $(CODE)
+	$(POETRY_RUN) black --line-length 79 --target-version py310 --skip-string-normalization $(CODE)
 	$(POETRY_RUN) unify --in-place --recursive $(CODE)
 
 .PHONY: lint
 lint: ###@Code Lint code
 	$(POETRY_RUN) flake8 --jobs 4 --statistics --show-source $(CODE)
-	$(POETRY_RUN) pylint --rcfile=setup.cfg $(CODE)
+	$(POETRY_RUN) pylint $(CODE)
 	$(POETRY_RUN) mypy $(CODE)
-	$(POETRY_RUN) black --line-length 79 --target-version py39 --skip-string-normalization --check $(CODE)
+	$(POETRY_RUN) black --line-length 79 --target-version py310 --skip-string-normalization --check $(CODE)
 	$(POETRY_RUN) pytest --dead-fixtures --dup-fixtures
 	$(POETRY_RUN) safety check --full-report || echo "Safety check failed"
 

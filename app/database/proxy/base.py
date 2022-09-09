@@ -6,6 +6,7 @@ from app.database.connection import SessionManager
 from app.database.models import BaseModel
 from app.database.schemas import BaseModel as SchemaBaseModel
 
+
 BaseProxyType = tp.TypeVar('BaseProxyType', bound='BaseProxy')
 
 

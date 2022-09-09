@@ -20,6 +20,7 @@ from app.database.proxy import UserProxy
 from app.database.schemas import UserSchema
 from tests.utils import DPSClass, UserData, make_alembic_config
 
+
 # @pytest.fixture(scope='session')
 # def event_loop():
 #     """

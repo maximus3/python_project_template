@@ -30,3 +30,120 @@ SQLAlchemy-Utils = "^0.38.3"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# PYTEST
+
+[tool.pytest]
+addopts = ["--cov=app", "--cov-fail-under=90"]
+python_files = "test_*.py"
+python_classes = ["*Test", "Test*"]
+python_functions = "test_*"
+testpaths = "tests/"
+
+[tool.coverage.report]
+exclude_lines = [
+    "# pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "def __unicode__",
+]
+show_missing = true
+skip_empty = true
+skip_covered = true
+fail_under = 90
+omit = [
+  "*/__init__.py",
+  "app/db/migrator/env.py",
+]
+
+[tool.coverage.html]
+directory = "pytest-cov-report"
+
+[tool.coverage.run]
+branch = true
+concurrency = ["thread", "greenlet"]
+omit = ["tests/*", "**/__main__.py", "*site-packages*"]
+
+# LINTERS
+
+[tool.pylint.master]
+extension-pkg-allow-list = ["pydantic"]
+
+[tool.pylint.basic]
+good-names = ["db"]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+    "C0114",  # missing-module-docstring
+    "C0116",  # missing-function-docstring
+    "R0903",  # too-few-public-methods (for sqlalchemy tables and pydantic classes)
+    "C0115",  # missing-class-docstring (for api routes)
+    "C0103",  # Constant name "api" doesn't conform to UPPER_CASE naming style (invalid-name)
+    "C0111",  # Missing module docstring (missing-docstring)
+    "E0213",  # Method should have "self" as first argument (no-self-argument) - N805 for flake8
+    "R0901",  # Too many ancestors (m/n) (too-many-ancestors)
+    "R0914",  # Too many local variables (m/n) (too-many-locals)
+    "W0511",  # TODO needed? (fixme)
+    "E0611",  # No name '<name>' in module '<module>' (no-name-in-module)
+]
+
+[tool.pylint]
+generated-members = "responses.*"
+good-names = "i,j,k,e,x,_,pk,id"
+max-module-lines = 300
+output-format = "colorized"
+ignored-classes= ["contextlib.closing", "sqlalchemy.orm.scoping.scoped_session"]
+# Maximum number of nested code blocks for function / method
+max-nested-blocks=3
+# Maximum number of branch for function / method body
+max-branches=15
+# Maximum number of statements in function / method body
+max-statements=30
+# Maximum number of attributes for a class (see R0902).
+max-attributes=10
+# Maximum number of public methods for a class (see R0904).
+max-public-methods=10
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.isort]
+balanced_wrapping = true
+default_section = "THIRDPARTY"
+known_first_party = "tests,app"
+lines_after_imports = 2
+multi_line_output = 3
+line_length = 88
+include_trailing_comma = true
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
