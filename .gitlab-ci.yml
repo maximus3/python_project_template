@@ -1,4 +1,4 @@
-image: python:3.9
+image: python:3.10
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -25,15 +25,20 @@ lint:
   stage: lint
   script:
     - flake8 --jobs 4 --statistics --show-source $CODE
-    - pylint --jobs 4 --rcfile=setup.cfg $CODE
+    - pylint --jobs 4 $CODE
     - mypy $CODE
     - black --line-length 79 --target-version py39 --skip-string-normalization --check $CODE
     - pytest --dead-fixtures --dup-fixtures
-    - safety check --full-report || echo "safety check failed"
 
 test:
   stage: test
+  variables:
+    POSTGRES_DB: data
+    POSTGRES_USER: pguser
+    POSTGRES_PASSWORD: pgpswd
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
   services:
-    - name: postgres:13.3
+    - name: postgres:14.5
   script:
     - pytest --verbosity=2 --showlocals --log-level=DEBUG --cov
