@@ -7,9 +7,19 @@ on:
     branches: [ "main" ]
 
 jobs:
-  lint:
+  check:
 
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14.5
+        env:
+          POSTGRES_DB: data
+          POSTGRES_USER: pguser
+          POSTGRES_PASSWORD: pgpswd
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
 
     steps:
     #----------------------------------------------
@@ -39,22 +49,6 @@ jobs:
       
     - name: Run lint
       run: make lint
-
-  test:
-    runs-on: ubuntu-latest
-    needs: [lint]
-    services:
-      postgres:
-        image: postgres:14.5
-        env:
-          POSTGRES_DB: data
-          POSTGRES_USER: pguser
-          POSTGRES_PASSWORD: pgpswd
-          POSTGRES_HOST: postgres
-          POSTGRES_PORT: 5432
-    steps:
-      - name: Make
-        run: make
-    
-      - name: Run tests
-        run: make test
+      
+    - name: Run tests
+      run: make test
