@@ -51,4 +51,4 @@ jobs:
       run: make lint
       
     - name: Run tests
-      run: make test
+      run: sudo make test
