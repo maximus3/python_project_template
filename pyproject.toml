@@ -34,7 +34,7 @@ build-backend = "poetry.core.masonry.api"
 # PYTEST
 
 [tool.pytest]
-addopts = ["--cov=app", "--cov-fail-under=90"]
+addopts = ["--cov=app", "--cov-fail-under=90", "--ignore=pgdata", "--ignore=pgadmin"]
 python_files = "test_*.py"
 python_classes = ["*Test", "Test*"]
 python_functions = "test_*"
