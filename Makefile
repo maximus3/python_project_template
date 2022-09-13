@@ -123,15 +123,19 @@ check: format lint test ###@Code Format and lint code then run tests
 
 .PHONY: docker-up
 docker-up: ##@Application Docker up
-	docker-compose up
+	docker-compose up --remove-orphans
 
 .PHONY: docker-up-d
 docker-up-d: ##@Application Docker up detach
-	docker-compose up -d
+	docker-compose up -d --remove-orphans
 
 .PHONY: docker-build
 docker-build: ##@Application Docker build
 	docker-compose build
+
+.PHONY: docker-up-build
+docker-up-build: ##@Application Docker up detach with build
+	docker-compose up -d --build --remove-orphans
 
 .PHONY: docker-down
 docker-down: ##@Application Docker down
