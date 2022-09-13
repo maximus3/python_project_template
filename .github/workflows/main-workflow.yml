@@ -52,3 +52,40 @@ jobs:
       
     - name: Run tests
       run: sudo make test
+
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Get github URL
+      run: |
+        echo "GITHUB_URL=$(git remote get-url origin)" >> $GITHUB_ENV
+        echo "GITHUB_REPO=${{ github.repository }}" >> $GITHUB_ENV
+    
+    - name: Make dir .ssh
+      run: mkdir -p ~/.ssh
+      
+    - name: Add deploy ssh key
+      run: echo "${{ secrets.SSH_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
+    
+    - name: Allow use deploy key
+      run: sudo chmod 600 ~/.ssh/deploy_key
+    
+    - name: Add ssh known hosts
+      run: echo "${{ secrets.SSH_KNOWN_HOSTS }}" | tr -d '\r' > ~/.ssh/known_hosts
+    
+    - name: Test connection and copy repo if not exists
+      run: ssh -i ~/.ssh/deploy_key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_ADRESS }} "[ -e ${{ github.event.repository.name }} ] || git clone git@github.com:$GITHUB_REPO.git; exit"
+
+
+    - name: SSH WORKS - replace files
+      run: |
+        ssh  -i ~/.ssh/deploy_key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_ADRESS }} "
+        cd ~/${{ github.event.repository.name }};
+        git pull;
+        echo \"${{ secrets.ENV }}\" > .env;
+        make docker-up-build;
+        exit"
