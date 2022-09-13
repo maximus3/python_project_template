@@ -27,3 +27,9 @@ chmod +x generate.sh
 - Open `Settings` of your repo
 - Open `Secrets` - `Actions`
 - Click on `New repository secret`
+
+## 4. Security
+
+**MAKE SURE YOU DON'T COMMIT THE GENERATED FILES TO THE REPOSITORY**
+
+CHECK `.gitignore`
